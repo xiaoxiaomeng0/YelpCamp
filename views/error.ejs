@@ -1,0 +1,13 @@
+<% layout("./layouts/boilplate" ) %>
+    <div class="container w-50 ">
+        <div class="d-flex pt-5 justify-content-md-center">
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">
+                    <%=err.message%>
+                </h4>
+                <p>
+                    <%= err.stack %>
+                </p>
+            </div>
+        </div>
+    </div>
