@@ -1,8 +1,6 @@
 <% layout("./layouts/boilplate" ) %>
-    <div id="map" style="width: 100%; height: 500px"></div>
-
-
-    
+    <link rel="stylesheet" href="/CSS/mapStyle.css">
+    <div id="clusterMap"></div>
     <div class="row">
         <h1 class="d-inline col-auto me-auto">All campgrounds</h1>
         <a class="btn btn-primary btn-lg col-auto" href="/campgrounds/new">Add New Campground</a>
@@ -33,7 +31,7 @@
             <% } %>
                 <script>
                     const mapToken = "<%-process.env.MAPBOX_TOKEN%>"
-                    const campgrounds = {"features": <%-JSON.stringify(campgrounds)%>}
+                    const campgrounds = { "features": <%-JSON.stringify(campgrounds)%>}
                 </script>
                 <script src="/clusterMap.js"></script>
     </div>
