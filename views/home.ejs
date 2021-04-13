@@ -1,169 +1,90 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yelpcamp Homepage</title>
-    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-    <link href="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css" rel="stylesheet">
-    <script src="https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js"></script>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-        }
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
+        integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+    <link rel="stylesheet" href="/CSS/homePage.css">
 
-        #map {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
 </head>
 
-<body>
-    <div id="map"></div>
+<body class="text-center text-white">
 
-    <script>
-        mapboxgl.accessToken = 'pk.eyJ1IjoieGlhb3hpYW9tZW5nMCIsImEiOiJja25hcWp5cG4wdm1yMm9wajcxc2FpZ3FjIn0.j0ZUy5UJ8cy57QvSEHNvOg';
-        var map = new mapboxgl.Map({
-            container: 'map',
-            style: 'mapbox://styles/mapbox/dark-v10',
-            center: [-103.59179687498357, 40.66995747013945],
-            zoom: 3
-        });
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+        <header class="mb-auto">
+            <div>
+                <h3 class="float-md-left mb-0">YelpCamp</h3>
+                <nav class="nav nav-masthead justify-content-center float-md-right">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link" href="/campgrounds">Campgrounds</a>
+                    <% if(!currentUser) { %>
+                        <a class="nav-link" href="/login">Login</a>
+                        <a class="nav-link" href="/register">Register</a>
+                        <% } else { %>
+                            <a class="nav-link" href="/logout">Logout</a>
+                            <% } %>
+                </nav>
+            </div>
+        </header>
+        <main class="px-3">
+            <h1>YelpCamp</h1>
+            <p class="lead"> Welcome to YelpCamp! <br> Jump right in and explore our many campgrounds. <br>
+                Feel free to share some of your own and comment on others!</p>
+            <a href="/campgrounds" class="btn btn-lg btn-secondary font-weight-bold border-white bg-white">View
+                Campgrounds</a>
+        </main>
 
-        map.on('load', function () {
-            // Add a new source from our GeoJSON data and
-            // set the 'cluster' option to true. GL-JS will
-            // add the point_count property to your source data.
-            map.addSource('earthquakes', {
-                type: 'geojson',
-                // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
-                // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
-                data:
-                    'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson',
-                cluster: true,
-                clusterMaxZoom: 14, // Max zoom to cluster points on
-                clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
-            });
+        <footer class="mt-auto text-white-50">
+            <p>&copy; 2020 </p>
+        </footer>
 
-            map.addLayer({
-                id: 'clusters',
-                type: 'circle',
-                source: 'earthquakes',
-                filter: ['has', 'point_count'],
-                paint: {
-                    // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
-                    // with three steps to implement three types of circles:
-                    //   * Blue, 20px circles when point count is less than 100
-                    //   * Yellow, 30px circles when point count is between 100 and 750
-                    //   * Pink, 40px circles when point count is greater than or equal to 750
-                    'circle-color': [
-                        'step',
-                        ['get', 'point_count'],
-                        '#51bbd6',
-                        100,
-                        '#f1f075',
-                        750,
-                        '#f28cb1'
-                    ],
-                    'circle-radius': [
-                        'step',
-                        ['get', 'point_count'],
-                        20,
-                        100,
-                        30,
-                        750,
-                        40
-                    ]
-                }
-            });
 
-            map.addLayer({
-                id: 'cluster-count',
-                type: 'symbol',
-                source: 'earthquakes',
-                filter: ['has', 'point_count'],
-                layout: {
-                    'text-field': '{point_count_abbreviated}',
-                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                    'text-size': 12
-                }
-            });
+    </div>
 
-            map.addLayer({
-                id: 'unclustered-point',
-                type: 'circle',
-                source: 'earthquakes',
-                filter: ['!', ['has', 'point_count']],
-                paint: {
-                    'circle-color': '#11b4da',
-                    'circle-radius': 4,
-                    'circle-stroke-width': 1,
-                    'circle-stroke-color': '#fff'
-                }
-            });
+    <!-- <div class="home-container d-flex w-100 mx-auto flex-column">
+        <nav class="navbar sticky-top">
+            <div class="container-fluid">
+                <span class="navbar-brand mb-0 h1">YelpCamp</span>
+                <div class="ms-auto nav align-items-center">
+                    <a class="nav-link active" aria-current="page" href="/home">Home</a>
+                    <a class="nav-link" href="/campgrounds">Campgrounds</a>
+                    <% if(!currentUser) { %>
+                        <a class="nav-link" href="/login">Login</a>
+                        <a class="nav-link" href="/register">Register</a>
+                        <% } else { %>
+                            <a class="nav-link" href="/logout">Logout</a>
+                            <% } %>
 
-            // inspect a cluster on click
-            map.on('click', 'clusters', function (e) {
-                var features = map.queryRenderedFeatures(e.point, {
-                    layers: ['clusters']
-                });
-                var clusterId = features[0].properties.cluster_id;
-                map.getSource('earthquakes').getClusterExpansionZoom(
-                    clusterId,
-                    function (err, zoom) {
-                        if (err) return;
+                </div>
+            </div>
+        </nav>
 
-                        map.easeTo({
-                            center: features[0].geometry.coordinates,
-                            zoom: zoom
-                        });
-                    }
-                );
-            });
+        <div class="d-flex vh-100 flex-column justify-content-center align-items-center">
+            <h1>YelpCamp</h1>
+            <p>Welcome to the Yelpcamp! <br>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum
+                distinctio,
+                harum
+                sapiente
+                nulla voluptatem temporibus dolore enim possimus aperiam exercitationem illo, deserunt excepturi
+                laudantium
+                debitis a. Quae soluta iure a!</br> </p>
+            <a href="/campgrounds" class="btn btn-large btn-primary">View Campgrounds</a>
+        </div>
 
-            // When a click event occurs on a feature in
-            // the unclustered-point layer, open a popup at
-            // the location of the feature, with
-            // description HTML from its properties.
-            map.on('click', 'unclustered-point', function (e) {
-                var coordinates = e.features[0].geometry.coordinates.slice();
-                var mag = e.features[0].properties.mag;
-                var tsunami;
+    </div> -->
 
-                if (e.features[0].properties.tsunami === 1) {
-                    tsunami = 'yes';
-                } else {
-                    tsunami = 'no';
-                }
 
-                // Ensure that if the map is zoomed out such that
-                // multiple copies of the feature are visible, the
-                // popup appears over the copy being pointed to.
-                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                }
 
-                new mapboxgl.Popup()
-                    .setLngLat(coordinates)
-                    .setHTML(
-                        'magnitude: ' + mag + '<br>Was there a tsunami?: ' + tsunami
-                    )
-                    .addTo(map);
-            });
-
-            map.on('mouseenter', 'clusters', function () {
-                map.getCanvas().style.cursor = 'pointer';
-            });
-            map.on('mouseleave', 'clusters', function () {
-                map.getCanvas().style.cursor = '';
-            });
-        });
-    </script>
-
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+        integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>

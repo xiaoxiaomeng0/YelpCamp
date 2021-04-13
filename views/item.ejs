@@ -1,5 +1,7 @@
 <% layout("./layouts/boilplate" ) %>
     <link rel="stylesheet" type="text/css" href="/CSS/starability.css" />
+    <link rel="stylesheet" href="/CSS/mapStyle.css">
+
 
     <div class="row">
         <div class="col-md-6">
@@ -59,7 +61,7 @@
 
 
         <div class="col-md-6">
-            <div id='map' style='width: 100%; height: 300px;'></div>
+            <div id='map'></div>
             <% if (currentUser) {%>
                 <legend>Add a review:</legend>
                 <form class="needs-validation" action="/campgrounds/<%=campground._id%>" method="POST" novalidate>
@@ -119,5 +121,6 @@
             const campground = <%-JSON.stringify(campground)%>
         </script>
 
-        <script src="/mapboxGenerate.js"></script>
+        <script src="/individualMap.js"></script>
+
     </div>
