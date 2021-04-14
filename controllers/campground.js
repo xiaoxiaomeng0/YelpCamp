@@ -80,8 +80,6 @@ module.exports.putCampground = async (req, res) => {
   campground.images.push(...imagesFromReq);
   await campground.save();
 
-  console.log(campground.images);
-
   if (req.body.deleteImages) {
     for (let f of req.body.deleteImages) {
       await cloudinary.uploader.destroy(f);
