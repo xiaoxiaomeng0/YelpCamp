@@ -26,9 +26,8 @@ const localStrategy = require("passport-local").Strategy;
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
 
-const dbUrl = "mongodb://localhost:27017/yelpcamp";
-// const dbUrl = process.env.DB_URL;
-// mongodb://localhost:27017/yelpcamp"
+const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/yelpcamp";
+
 mongoose
   .connect(dbUrl, {
     useNewUrlParser: true,
@@ -94,18 +93,20 @@ app.use(
 
 app.use(express.static(path.join(__dirname, "public")));
 
+const secret = process.env.SECRET || "squirrel";
+
 const store = MongoStore.create({
   mongoUrl: dbUrl,
   touchAfter: 24 * 3600,
   crypto: {
-    secret: "squirrel",
+    secret,
   },
 });
 
 const sessionOptions = {
   store,
   name: "Bibi",
-  secret: "mylittesecret",
+  secret,
   resave: false,
   saveUninitialized: true,
   cookie: { maxAge: 600000 },
@@ -149,6 +150,8 @@ app.use((err, req, res, next) => {
   if (!err.message) err.message = "Something went wrong";
   res.status(statusCode).render("error", { err });
 });
-app.listen(3000, () => {
-  console.log("Listening on port 3000!");
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
+  console.log(`Listening on port ${port}!`);
 });
