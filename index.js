@@ -17,15 +17,20 @@ const reviewRoute = require("./route/review");
 const userRoute = require("./route/User");
 
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
+
 const passport = require("passport");
 const localStrategy = require("passport-local").Strategy;
 
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
 
+const dbUrl = "mongodb://localhost:27017/yelpcamp";
+// const dbUrl = process.env.DB_URL;
+// mongodb://localhost:27017/yelpcamp"
 mongoose
-  .connect("mongodb://localhost:27017/yelpcamp", {
+  .connect(dbUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
@@ -89,7 +94,16 @@ app.use(
 
 app.use(express.static(path.join(__dirname, "public")));
 
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  touchAfter: 24 * 3600,
+  crypto: {
+    secret: "squirrel",
+  },
+});
+
 const sessionOptions = {
+  store,
   name: "Bibi",
   secret: "mylittesecret",
   resave: false,
