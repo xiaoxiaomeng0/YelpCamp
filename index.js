@@ -128,18 +128,17 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/", userRoute);
-app.use("/campgrounds", campRoute);
-app.use("/campgrounds/:id", reviewRoute);
-
 app.engine("ejs", ejsMate);
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-app.get("/home", (req, res) => {
+app.get("/", (req, res) => {
   res.render("home");
 });
+app.use("/", userRoute);
+app.use("/campgrounds", campRoute);
+app.use("/campgrounds/:id", reviewRoute);
 
 app.all("*", (req, res, next) => {
   throw new AsyncError(404, "Page not found!");
